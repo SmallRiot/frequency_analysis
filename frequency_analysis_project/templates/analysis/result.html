@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        .word-cloud {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .word-cloud img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        ul li:nth-child(odd) {
+            background-color: #efefef;
+        }
+        .logo {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            max-width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+
+    <div class="container">
+        <h2>Результаты частотного анализа</h2>
+
+        <div class="word-cloud">
+            <h3>Word Cloud:</h3>
+            <img src="{% static 'wordcloud.png' %}" alt="Word Cloud">
+        </div>
+
+        <h3>Words:</h3>
+        <ul>
+            {% for word, count in word_freq.items %}
+            <li>{{ word }}: <strong>{{ count }}</strong></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Bigrams:</h3>
+        <ul>
+            {% for phrase, count in bigram_freq.items %}
+            <li>{{ phrase }}: <strong>{{ count }}</strong></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Trigrams:</h3>
+        <ul>
+            {% for phrase, count in trigram_freq.items %}
+            <li>{{ phrase }}: <strong>{{ count }}</strong></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
