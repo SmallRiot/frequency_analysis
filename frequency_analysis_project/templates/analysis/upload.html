@@ -28,6 +28,12 @@
             color: #333;
             margin-bottom: 20px;
         }
+        .description {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
         form {
             display: flex;
             flex-direction: column;
@@ -59,11 +65,17 @@
 <body>
     <div class="upload-container">
         <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
-        <h2>Загрузите xlsx фаил для частотного анализа</h2>
+        <h2>Загрузите xlsx файл для частотного анализа</h2>
+
+        <div class="description">
+            <p>Эта страница позволяет загрузить Excel файл для проведения частотного анализа. Частотный анализ выявляет наиболее часто используемые слова и фразы в тексте, что помогает определить ключевые темы или повторяющиеся выражения.</p>
+            <p>Мы также создадим <strong>облако слов</strong> — это визуализация, которая показывает самые частые слова в вашем тексте. Чем чаще слово используется, тем крупнее оно отображается в облаке, что позволяет легко выделить важные слова или темы.</p>
+        </div>
+
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Upload</button>
+            <button type="submit">Загрузить</button>
         </form>
     </div>
 </body>

@@ -31,6 +31,12 @@
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 10px;
         }
+        p.description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
         .word-cloud {
             text-align: center;
             margin-bottom: 20px;
@@ -60,6 +66,26 @@
             left: 10px;
             max-width: 100px;
         }
+        /* Стиль для кнопки скачивания */
+        .download-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px auto;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+        .download-container {
+            text-align: center;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -67,13 +93,19 @@
 
     <div class="container">
         <h2>Результаты частотного анализа</h2>
+        <p class="description">
+            Частотный анализ позволяет выявить ключевые слова и фразы, которые часто встречаются в вашем тексте. 
+            Это помогает обнаружить основные темы и идеи. Ниже представлены результаты анализа.
+        </p>
 
         <div class="word-cloud">
             <h3>Word Cloud:</h3>
+            <p class="description">Облако слов — это визуализация, показывающая наиболее часто встречающиеся слова в вашем тексте. Чем чаще используется слово, тем крупнее оно отображается.</p>
             <img src="{% static 'wordcloud.png' %}" alt="Word Cloud">
         </div>
 
         <h3>Words:</h3>
+        <p class="description">Список всех слов, которые встречаются более одного раза в тексте. Это помогает выделить основные термины и частые слова.</p>
         <ul>
             {% for word, count in word_freq.items %}
             <li>{{ word }}: <strong>{{ count }}</strong></li>
@@ -81,6 +113,7 @@
         </ul>
 
         <h3>Bigrams:</h3>
+        <p class="description">Биграммы представляют собой пары из двух слов, которые часто встречаются рядом. Они дают представление о часто используемых фразах.</p>
         <ul>
             {% for phrase, count in bigram_freq.items %}
             <li>{{ phrase }}: <strong>{{ count }}</strong></li>
@@ -88,11 +121,17 @@
         </ul>
 
         <h3>Trigrams:</h3>
+        <p class="description">Триграммы — это комбинации из трех слов, которые часто встречаются вместе. Они помогают выделить более длинные часто используемые выражения.</p>
         <ul>
             {% for phrase, count in trigram_freq.items %}
             <li>{{ phrase }}: <strong>{{ count }}</strong></li>
             {% endfor %}
         </ul>
+
+        <!-- Контейнер для кнопки скачивания -->
+        <div class="download-container">
+            <a href="{% url 'download_file' %}" class="download-button">Скачать файл анализа</a>
+        </div>
     </div>
 </body>
 </html>
