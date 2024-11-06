@@ -4,7 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Result</title>
+    <title>Результаты частотного анализа</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,26 +20,14 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h2 {
+        h2, h3, h4 {
             color: #333;
-            text-align: center;
-            margin-bottom: 30px;
         }
-        h3 {
-            color: #555;
-            margin-top: 30px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-        p.description {
+        .description {
             color: #666;
             font-size: 14px;
             margin-bottom: 20px;
             text-align: left;
-        }
-        .word-cloud {
-            text-align: center;
-            margin-bottom: 20px;
         }
         .word-cloud img {
             max-width: 100%;
@@ -55,18 +43,13 @@
             margin: 5px 0;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        ul li:nth-child(odd) {
-            background-color: #efefef;
+        .category-title {
+            margin-top: 30px;
+            color: #555;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
         }
-        .logo {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            max-width: 100px;
-        }
-        /* Стиль для кнопки скачивания */
         .download-button {
             display: inline-block;
             padding: 10px 20px;
@@ -77,7 +60,6 @@
             text-decoration: none;
             border-radius: 5px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .download-button:hover {
             background-color: #0056b3;
@@ -89,8 +71,6 @@
     </style>
 </head>
 <body>
-    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
-
     <div class="container">
         <h2>Результаты частотного анализа</h2>
         <p class="description">
@@ -99,36 +79,60 @@
         </p>
 
         <div class="word-cloud">
-            <h3>Word Cloud:</h3>
+            <h3>Облако слов</h3>
             <p class="description">Облако слов — это визуализация, показывающая наиболее часто встречающиеся слова в вашем тексте. Чем чаще используется слово, тем крупнее оно отображается.</p>
             <img src="{% static 'wordcloud.png' %}" alt="Word Cloud">
         </div>
 
-        <h3>Words:</h3>
-        <p class="description">Список всех слов, которые встречаются более одного раза в тексте. Это помогает выделить основные термины и частые слова.</p>
+        <h3 class="category-title">Слова:</h3>
         <ul>
             {% for word, count in word_freq.items %}
             <li>{{ word }}: <strong>{{ count }}</strong></li>
             {% endfor %}
         </ul>
 
-        <h3>Bigrams:</h3>
-        <p class="description">Биграммы представляют собой пары из двух слов, которые часто встречаются рядом. Они дают представление о часто используемых фразах.</p>
+        <h3 class="category-title">Смысловые биграммы:</h3>
+        {% if bigram_meaningful %}
+            {% for category, phrases in bigram_meaningful.items %}
+                <h4>{{ category }}</h4>
+                <ul>
+                    {% for phrase, count in phrases %}
+                    <li>{{ phrase }}: <strong>{{ count }}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% else %}
+            <p>Смысловые биграммы отсутствуют</p>
+        {% endif %}
+
+        <h3 class="category-title">Несмысловые биграммы:</h3>
         <ul>
-            {% for phrase, count in bigram_freq.items %}
+            {% for phrase, count in bigram_non_meaningful.items %}
             <li>{{ phrase }}: <strong>{{ count }}</strong></li>
             {% endfor %}
         </ul>
 
-        <h3>Trigrams:</h3>
-        <p class="description">Триграммы — это комбинации из трех слов, которые часто встречаются вместе. Они помогают выделить более длинные часто используемые выражения.</p>
+        <h3 class="category-title">Смысловые триграммы:</h3>
+        {% if trigram_meaningful %}
+            {% for category, phrases in trigram_meaningful.items %}
+                <h4>{{ category }}</h4>
+                <ul>
+                    {% for phrase, count in phrases %}
+                    <li>{{ phrase }}: <strong>{{ count }}</strong></li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        {% else %}
+            <p>Смысловые триграммы отсутствуют</p>
+        {% endif %}
+
+        <h3 class="category-title">Несмысловые триграммы:</h3>
         <ul>
-            {% for phrase, count in trigram_freq.items %}
+            {% for phrase, count in trigram_non_meaningful.items %}
             <li>{{ phrase }}: <strong>{{ count }}</strong></li>
             {% endfor %}
         </ul>
 
-        <!-- Контейнер для кнопки скачивания -->
         <div class="download-container">
             <a href="{% url 'download_file' %}" class="download-button">Скачать файл анализа</a>
         </div>

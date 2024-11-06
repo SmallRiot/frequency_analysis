@@ -9,14 +9,24 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            # Обрабатываем загруженный файл
-            file_path = handle_uploaded_file(request.FILES['file'])
-            word_freq, bigram_freq, trigram_freq = frequency_analysis(file_path)
-            return render(request, 'analysis/result.html', {
+            file = request.FILES['file']
+            file_path = f'static/{file.name}'
+            with open(file_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+
+            # Обновляем вызов frequency_analysis
+            word_freq, bigram_meaningful, bigram_non_meaningful, trigram_meaningful, trigram_non_meaningful = frequency_analysis(file_path)
+
+            context = {
                 'word_freq': word_freq,
-                'bigram_freq': bigram_freq,
-                'trigram_freq': trigram_freq
-            })
+                'bigram_meaningful': bigram_meaningful,
+                'bigram_non_meaningful': bigram_non_meaningful,
+                'trigram_meaningful': trigram_meaningful,
+                'trigram_non_meaningful': trigram_non_meaningful,
+            }
+
+            return render(request, 'analysis/result.html', context)
     else:
         form = UploadFileForm()
     return render(request, 'analysis/upload.html', {'form': form})
